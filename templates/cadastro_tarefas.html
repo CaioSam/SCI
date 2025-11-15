@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 5px;
+        }
+        h1, h2, p {
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        form {
+            width: 50%;
+            margin: 10px auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="number"], input[type="text"], input[type="date"] {
+            width: 95%;
+            height: 5px;
+            padding: 5px;
+            margin-bottom: 5px;
+            border: 1px solid #ccc;
+        }
+        select {
+            width: 100%;
+            height: 25px;
+            padding: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+        }
+        button {
+            width: 100%;
+            height: 30px;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: #fff;
+        }
+        button:hover {
+            background-color: #3e8e41;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f0f0f0;
+        }
+        .alert {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .alert-success {
+            background-color: #dff0df;
+            border-color: #d6e9c6;
+            color: #3c763d;
+        }
+        .alert-danger {
+            background-color: #f2dede;
+            border-color: #ebccd1;
+            color: #a94442;
+        }
+    </style>
+    <title>Cadastro de Tarefas</title>
+</head>
+<body>    
+    <h1>Cadastro de Tarefas</h1>
+    <form action="" method="POST" onsubmit="document.getElementById('funcionario').focus();">
+        <label for="data">Data:</label>
+        <input type="date" id="data" name="data" value="{{ data }}" required>
+        <br>
+        <label for="funcionario">Código do Funcionário:</label>
+        <input type="number" id="funcionario" name="funcionario" value="{{ funcionario_codigo }}" required>
+        
+        <label for="nome_completo">Nome do Funcionário:</label>
+        <input type="text" id="nome_completo" name="nome_completo" readonly>
+        <br>
+        <label for="tarefa">Tarefa:</label>
+        <select class="form-control" id="tarefa" name="tarefa" required onchange="updateQuantidadeValor()">
+            {% set TAREFA_ESCOLHAS = [('CORTE', 'CORTE'), ('DIARIA', 'DIARIA'), ('FALTA', 'FALTA'), ('CHUVA', 'CHUVA'), ('ATESTADO', 'ATESTADO'),] %}
+            {% for choice in TAREFA_ESCOLHAS %}
+                <option value="{{ choice[0] }}" {% if choice[0] == tarefa_selecionada %}selected{% endif %}>{{ choice[1] }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="quantidade">Quantidade (metros):</label>
+        <input type="number" step="0.01" id="quantidade" name="quantidade" required>       
+        <br>
+        <label for="valor">Valor (preço):</label>
+        <input type="number" step="0.0001" id="valor" name="valor" value="{{valor}}" required>
+        <br>
+        <button type="submit">Cadastrar</button>
+    </form>
+    <h2>Tarefas do Funcionario</h2>    
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Funcionário</th>
+                <th>Tarefa</th>
+                <th>Quantidade</th>
+                <th>Valor</th>
+                <th>Total</th>
+                <th>Ações</th>                
+            </tr>
+        </thead>
+        <tbody>
+            {% for tarefa in tarefas %}
+            <tr data-tarefa-id="{{ tarefa.id }}">
+                <td>{{ tarefa.data.strftime('%d-%m-%Y') }}</td>
+                <td>{{ tarefa.funcionario }}</td>
+                <td>{{ tarefa.tarefa }}</td>
+                <td>{{ tarefa.quantidade }}</td>
+                <td>{{ tarefa.valor }}</td>
+                <td>{{ tarefa.total }}</td>
+                <td><a href="{{ url_for('delete_tarefa_route', tarefa_id=tarefa.id) }}">Excluir</a></td>
+                    
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+    const funcionarioInput = document.getElementById('funcionario');
+    const nomeCompletoInput = document.getElementById('nome_completo');
+
+    funcionarioInput.addEventListener('input', async () => {
+        const funcionarioCodigo = funcionarioInput.value;
+        const url = `/sici_reginaldo/get-funcionario-nome-completo/${funcionarioCodigo}`;
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            if (data.error) {
+                nomeCompletoInput.value = "Digite um código válido";
+            } else {
+                nomeCompletoInput.value = data.nome_completo;
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    });
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById('funcionario').focus();
+        });
+
+        function updateQuantidadeValor() {
+            const tarefaSelect = document.getElementById('tarefa');
+            const tarefa = tarefaSelect.value;
+            const quantidadeInput = document.getElementById('quantidade');
+            const valorInput = document.getElementById('valor');
+
+            if (tarefa === 'DIARIA') {
+                quantidadeInput.value = 1;
+                valorInput.value = 54.67;
+            } else if (tarefa === 'FALTA') {
+                quantidadeInput.value = 1;
+                valorInput.value = 0;
+            } else if (tarefa === 'CHUVA') {
+                quantidadeInput.value = 1;
+                valorInput.value = 54.67;
+            } else if (tarefa === 'ATESTADO') {
+                quantidadeInput.value = 1;
+                valorInput.value = 54.67;
+            } else {
+                quantidadeInput.value = '';
+                valorInput.value = '';
+            }
+        }                    
+    </script>      
+   </body>
+</html>

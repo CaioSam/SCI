@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmar Exclusão de Tarefa</title>
+</head>
+<body>
+    <h1>Confirmar Exclusão de Tarefa</h1>
+    <p>Tem certeza de que deseja excluir a tarefa com o ID {{ tarefa_id }}?</p>
+    <form method="post" action="{{ url_for('excluir_tarefa', tarefa_id=tarefa_id) }}">
+        <input type="hidden" name="_method" value="DELETE">
+        <button type="submit">Sim, excluir</button>
+       
+    </form>
+</body>
+</html>

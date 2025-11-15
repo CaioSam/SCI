@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Empregados</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form {
+            width: 50%;
+            margin: 40px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="number"], input[type="text"], input[type="date"] {
+            width: 95%;
+            height: 30px;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+        }
+        button[type="submit"] {
+            width: 100%;
+            height: 30px;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: #fff;
+        }
+        button[type="submit"]:hover {
+            background-color: #3e8e41;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f0f0f0;
+        }
+        .alert {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .alert-success {
+            background-color: #dff0df;
+            border-color: #d6e9c6;
+            color: #3c763d;
+        }
+        .alert-danger {
+            background-color: #f2dede;
+            border-color: #ebccd1;
+            color: #a94442;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cadastro de Empregados</h1>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {{ 'alert-success' if message.type == 'success' else 'alert-danger' }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <form method="POST">
+        <label for="codigo">Código:</label>
+        <input type="number" id="codigo" name="codigo" required>
+        <br>
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome_completo" name="nome_completo" required>
+        <br>
+        <label for="cargo">Cargo:</label>
+        <input type="text" id="cargo" name="cargo" required>
+        <br>
+        <label for="data_admissao">Data de Admissão:</label>
+        <input type="date" id="data_admissao" name="data_admissao" required>
+        <br>
+        <button type="submit">SALVAR</button>
+    </form>
+    <h2>Funcionários cadastrados</h2>
+    <table>
+      <tr>
+        <th>Codigo</th>
+        <th>Nome Completo</th>
+        <th>Cargo</th>
+        <th>Data Admissao</th>
+        <th>Ações</th>
+      </tr>
+      {% for funcionario in funcionarios %}
+      <tr>
+        <td>{{ funcionario.codigo }}</td>
+        <td>{{ funcionario.nome_completo }}</td>
+        <td>{{ funcionario.cargo }}</td>
+        <td>{% if funcionario.data_admissao %}{{ funcionario.data_admissao.strftime("%d/%m/%Y") }}{% else %}Não informado{% endif %}</td>
+        <td>
+            <a href="{{ url_for('editar_funcionario', funcionario_codigo=funcionario.codigo) }}">Editar</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      body {
+          font-family: Arial, sans-serif;
+          margin: 20px;
+      }
+      h1, h2, p {
+          text-align: center;
+          margin-bottom: 20px;
+      }
+      form {
+          width: 50%;
+          margin: 40px auto;
+          padding: 20px;
+          border: 1px solid #ccc;
+          border-radius: 10px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      label {
+          display: block;
+          margin-bottom: 10px;
+      }
+      input[type="number"], input[type="text"], input[type="date"] {
+          width: 95%;
+          height: 30px;
+          padding: 10px;
+          margin-bottom: 20px;
+          border: 1px solid #ccc;
+      }
+      button {
+          width: 100%;
+          height: 30px;
+          padding: 10px;
+          margin-bottom: 20px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          background-color: #4CAF50;
+          color: #fff;
+      }
+      button:hover {
+          background-color: #3e8e41;
+      }
+      table {
+          width: 100%;
+          border-collapse: collapse;
+      }
+      th, td {
+          border: 1px solid #ddd;
+          padding: 10px;
+          text-align: left;
+      }
+      th {
+          background-color: #f0f0f0;
+      }
+      .alert {
+          padding: 10px;
+          border-radius: 5px;
+          margin-bottom: 20px;
+      }
+      .alert-success {
+          background-color: #dff0df;
+          border-color: #d6e9c6;
+          color: #3c763d;
+      }
+      .alert-danger {
+          background-color: #f2dede;
+          border-color: #ebccd1;
+          color: #a94442;
+      }
+  </style>
+  <title>Complementar Tarefas</title>
+  </head>
+  <body>
+    <h1>Complementar Tarefas</h1>
+    <form method="post" action="{{ url_for('complementar_tarefas_periodo') }}">
+      <label for="data_inicial">Data Inicial:</label>
+      <input type="date" id="data_inicial" name="data_inicial" required>
+      <br>
+      <label for="data_final">Data Final:</label>
+      <input type="date" id="data_final" name="data_final" required>
+      <br>
+      {% for message in get_flashed_messages() %}
+        <p>{{ message }}</p>
+      {% endfor %}
+      <button type="submit">Complementar Tarefas</button>
+    </form>
+		<p>Informe o período, geralmente 26/mês anterior a 25/mês atual.</p>
+        <script>
+            const dataInicioInput = document.getElementById('data_inicial');
+            const dataFimInput = document.getElementById('data_final');     
+            // Função para definir as datas padrão
+            function setDefaultDates() {
+                if (!dataInicioInput.value && !dataFimInput.value) {
+                    const today = new Date();
+                    const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 26);
+                    const lastDayOfCurrentMonth = new Date(today.getFullYear(), today.getMonth(), 25);
+    
+                    dataInicioInput.value = formatDate(lastMonth);
+                    dataFimInput.value = formatDate(lastDayOfCurrentMonth);
+                }
+            }
+            function formatDate(date) {
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const year = date.getFullYear();
+                return `${year}-${month}-${day}`;
+            }
+    
+            window.onload = setDefaultDates;        
+        </script>
+  </body>
+</html>

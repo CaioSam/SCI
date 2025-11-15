@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REGINALDO</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 100%;
+            margin: 10px auto;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            min-height: 95vh;
+
+        }
+        .header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+        }
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            flex-grow: 1;
+        }
+        .menu-lateral {
+            width: 250px;
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            border-right: 1px solid #ddd;
+            flex-shrink: 0;
+        }
+        .menu-lateral .link-box {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+        }
+        .menu-lateral .link-box a {
+            color: #f3f6f7; /* cor azul */
+            text-decoration: none;
+        }
+        .menu-lateral .link-box a:hover {
+            color: #ebfc05; /* cor branca */
+            background-color: #333; /* cor preta */
+        }
+        .conteudo-central {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        .conteudo-central iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: justify;
+        }
+        .footer-left {
+            float: left;
+        }
+        .footer-right {
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>SISTEMA DE CONTROLE E INTEGRAÇÃO</h1>
+        </div>
+        <div class="main-content">
+            <div class="menu-lateral">
+                <h2>
+		<div class="h1">
+                    <a>MENU</a>
+                </div>
+		</h2>
+                <div class="link-box">
+                    <a href="{{ url_for('cadastro_empresas') }}" target="conteudo">CADASTRO DE EMPRESAS</a>
+                </div>
+                <div class="link-box">
+                    <a href="{{ url_for('cadastro_empregados') }}" target="conteudo">CADASTRO DE EMPREGADOS</a>
+                </div>
+                <div class="link-box">
+                    <a href="{{ url_for('cadastro_tarefas') }}" target="conteudo">CADASTRO DE TAREFAS</a>
+                </div>
+                <div class="link-box">
+                    <a href="{{ url_for('consulta_tarefas_por_periodo') }}" target="conteudo"> EXCLUSÃO TAREFAS</a>
+                </div>
+                <div class="link-box">
+                    <a href="{{ url_for('relatorio') }}" target="conteudo">DIÁRIO TAREFAS</a>
+                </div>
+                <div class="link-box">
+                    <a href="{{url_for('relatorio_csv') }}" target="conteudo">Gerar CSV</a>
+                </div>
+                <div class="link-box">
+                    <a href="{{url_for('complementar_tarefas_periodo') }}" target="conteudo">COMPLEMENTAR TAREFAS</a>
+                </div>
+				
+            </div>
+            <div class="conteudo-central">
+                <iframe name="conteudo" src=""></iframe>
+            </div>
+        </div>
+        <footer>
+            <div class="footer-left">
+                &copy; Sistema de Controle e Integração <span id="ano-atual"></span>
+            </div>
+            <div class="footer-right">
+                SCI <span style="margin-right: 1cm;"></span>
+        </div>
+    </footer>
+    <script>
+        var ano_atual = new Date().getFullYear();
+        document.getElementById('ano-atual').innerHTML = ano_atual;
+    </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        h1 {
+            text-align: center;
+            padding-bottom: 20px;
+        }
+    </style>
+    <title>Editar Funcionário</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            width: 50%;
+            margin: 40px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"], input[type="date"] {
+            width: 95%;
+            height: 30px;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+        }
+        input[type="submit"] {
+            width: 100%;
+            height: 30px;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: #fff;
+        }
+        input[type="submit"]:hover {
+            background-color: #3e8e41;
+        }
+    </style>
+</head>
+<body>
+    <h1>Editar Funcionário</h1>
+    <h1>Código:{{ funcionario_codigo }}</h1>
+    <form action="" method="post">
+        <label for="nome_completo">Nome Completo:</label>
+        <input type="text" id="nome_completo" name="nome_completo" value="{{ funcionario.nome_completo }}"><br><br>
+        <label for="cargo">Cargo:</label>
+        <input type="text" id="cargo" name="cargo" value="{{ funcionario.cargo }}"><br><br>
+        <label for="data_admissao">Data de Admissão:</label>
+        <input type="date" id="data_admissao" name="data_admissao" value="{{ funcionario.data_admissao }}"><br><br>
+        <input type="submit" value="Editar">
+    </form>
+</body>
+</html>
